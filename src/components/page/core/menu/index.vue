@@ -3,6 +3,7 @@
     <el-card class="box-card">
       <div class="from-wrapper" style="padding-top:18px;">
         <el-form
+          ref="menuQuery"
           :inline="true"
           size="small"
           :model="menuQuery"
@@ -13,9 +14,9 @@
           </el-form-item>
           <el-form-item label="菜单状态">
             <el-select v-model="menuQuery.status" placeholder="选择菜单状态">
-              <el-option label="全部" value="shanghai" />
-              <el-option label="启用" value="beijing" />
-              <el-option label="禁用" value="beijing" />
+              <el-option label="全部" value="" />
+              <el-option label="启用" :value="0" />
+              <el-option label="禁用" :value="1" />
             </el-select>
           </el-form-item>
           <el-form-item>
@@ -27,7 +28,7 @@
             >查询</el-button>
           </el-form-item>
           <el-form-item>
-            <el-button round icon="el-icon-refresh-left" @click="onSubmit">重置</el-button>
+            <el-button round icon="el-icon-refresh-left" @click="resetMenuQuery">重置</el-button>
           </el-form-item>
           <el-form-item>
             <el-button
@@ -118,7 +119,7 @@
               size="small"
               type="primary"
               icon="el-icon-edit"
-              @click="handleEditMenu( index,row)"
+              @click="handleEditMenu(index,row)"
             />
             <el-button
               circle
@@ -126,6 +127,22 @@
               type="danger"
               icon="el-icon-delete"
               @click="handleDeleteMenu(index,row)"
+            />
+            <el-button
+              v-if="row.status"
+              circle
+              size="small"
+              type="success"
+              icon="el-icon-unlock"
+              @click="handleUpdateStatus(0,row)"
+            />
+            <el-button
+              v-if="!row.status"
+              circle
+              size="small"
+              type="info"
+              icon="el-icon-lock"
+              @click="handleUpdateStatus(1,row)"
             />
           </div>
         </template>
@@ -137,7 +154,15 @@
 </template>
 
 <script>
-import { getAllMenus, updateMenu, deleteMenu } from '@/api'
+// 目录
+const DIRECTORY = 0
+// 菜单
+const MENU = 1
+// 正常
+const STATUS_NORMAL = 0
+// 冻结
+const STATUS_FROZEN = 1
+import { getAllMenus, updateMenu, deleteMenu, findMenu } from '@/api'
 export default {
   components: {
     IconList: () => import('@@/base/icon-list'),
@@ -148,7 +173,7 @@ export default {
     return {
       menuQuery: {
         title: '',
-        status: 0,
+        status: '',
       },
       menuData: [],
       loading: true,
@@ -159,28 +184,57 @@ export default {
           slot: 'title',
         },
         {
-          label: '类型',
-          prop: 'type',
+          label: '状态',
+          prop: 'status',
           render: (h, params) => {
-            if (params.row.type === 0) {
+            if (params.row.status === STATUS_NORMAL) {
               return h(
                 'el-tag',
                 {
                   props: {
                     size: 'small',
-
+                    type: 'warning',
+                  },
+                },
+                '启用',
+              )
+            }
+            if (params.row.status === STATUS_FROZEN) {
+              return h(
+                'el-tag',
+                {
+                  props: {
+                    size: 'small',
+                    type: 'info',
+                  },
+                },
+                '冻结',
+              )
+            }
+          },
+        },
+        {
+          label: '类型',
+          prop: 'type',
+          render: (h, params) => {
+            if (params.row.type === DIRECTORY) {
+              return h(
+                'el-tag',
+                {
+                  props: {
+                    size: 'small',
                   },
                 },
                 '目录',
               )
             }
-            if (params.row.type === 1) {
+            if (params.row.type === MENU) {
               return h(
                 'el-tag',
                 {
                   props: {
                     size: 'small',
-                    type: 'danger',
+                    type: 'success',
                   },
                 },
                 '菜单',
@@ -189,7 +243,7 @@ export default {
           },
         },
         {
-          label: '路由地址',
+          label: '路由URL',
           prop: 'path',
           slot: 'path',
         },
@@ -210,6 +264,7 @@ export default {
         },
         {
           label: '操作',
+          align: 'center',
           slot: 'action',
         },
       ],
@@ -268,9 +323,23 @@ export default {
     handleAddMenuShow() {
       this.$refs.addMenu.showDrawer()
     },
+    handleUpdateStatus(status, row) {
+      row.status = status
+      updateMenu(row).then(res => {
+        this.getAllMenus()
+      })
+    },
 
     onSubmit() {
-      console.log('submit!')
+      findMenu(this.menuQuery).then(res => {
+        this.menuData = res.data
+        this.loading = false
+      })
+    },
+    resetMenuQuery() {
+      this.menuQuery.title = ''
+      this.menuQuery.status = ''
+      this.getAllMenus()
     },
   },
 }

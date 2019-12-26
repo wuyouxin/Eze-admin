@@ -33,6 +33,9 @@ export const getAllUserMenus = () => getRequest('/menu')
 // 拉取所有菜单
 export const getAllMenus = () => getRequest('/menu')
 
+// 拉取所有菜单
+export const findMenu = params => getRequest('/menu/find', params)
+
 // 更新单个菜单
 export const updateMenu = params => putRequest('/menu', params)
 

@@ -4,8 +4,11 @@ import { Message } from 'element-ui'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import { getToken } from 'common/utils/auth'
+
 import Layout from '@@/layout'
-import TwoLayout from '@@/layout/two-layout'
+import LayoutTwo from '@@/layout/layout-two'
+import LayoutThree from '@@/layout/layout-three'
+import LayoutFour from '@@/layout/layout-four'
 
 NProgress.configure({ showSpinner: false })
 
@@ -63,7 +66,9 @@ const menuArrayToRoutes = (menuTree) => {
       const route = menuTree[i]
 
       if (route.component === 'layout') route.component = Layout
-      else if (route.component === 'twoLayout') route.component = TwoLayout
+      else if (route.component === 'layoutTwo') route.component = LayoutTwo
+      else if (route.component === 'layoutThree') route.component = LayoutThree
+      else if (route.component === 'layoutFour') route.component = LayoutFour
       else route.component = loadViewFile(route.component)
 
       route.meta = { icon: route.icon, title: route.title }
