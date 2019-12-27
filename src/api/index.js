@@ -30,11 +30,17 @@ export const getAllUserMenus = () => getRequest('/menu')
 //* ********************************************************************
 //* ***************************     菜单     ****************************
 //* ********************************************************************
-// 拉取所有菜单
+// 拉取所有目录菜单
 export const getAllMenus = () => getRequest('/menu')
 
-// 拉取所有菜单
+// 精确查询菜单 不带分页
 export const findMenu = params => getRequest('/menu/find', params)
+
+// 只查询菜单 带分页
+export const getAllMenusType = (type, params) => getRequest(`/menu/type/${type}`, params)
+
+// 精确查询菜单 带分页
+export const findAllMenusType = (type, params) => getRequest(`/menu/find/type/${type}`, params)
 
 // 更新单个菜单
 export const updateMenu = params => putRequest('/menu', params)

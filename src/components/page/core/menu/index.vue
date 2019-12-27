@@ -14,7 +14,7 @@
           </el-form-item>
           <el-form-item label="菜单状态">
             <el-select v-model="menuQuery.status" placeholder="选择菜单状态">
-              <el-option label="全部" value="" />
+              <el-option label="全部" value />
               <el-option label="启用" :value="0" />
               <el-option label="禁用" :value="1" />
             </el-select>
@@ -49,10 +49,10 @@
         :data="menuData"
       >
         <template #title="{ row, index }">
+          <!-- // TODO 换行了 -->
           <el-input
             v-if="editIndex === index"
             v-model="row.title"
-            style="width:auto;"
             size="small"
             placeholder="请输入内容"
           />
@@ -176,7 +176,6 @@ export default {
         status: '',
       },
       menuData: [],
-      loading: true,
       columns: [
         {
           label: '菜单名称',
@@ -243,15 +242,16 @@ export default {
           },
         },
         {
-          label: '路由URL',
-          prop: 'path',
-          slot: 'path',
-        },
-        {
           label: '图标',
           prop: 'icon',
           slot: 'icon',
         },
+        {
+          label: '路由URL',
+          prop: 'path',
+          slot: 'path',
+        },
+
         {
           label: '菜单name (唯一)',
           prop: 'name',
@@ -279,7 +279,6 @@ export default {
     getAllMenus() {
       getAllMenus().then(res => {
         this.menuData = res.data
-        this.loading = false
       })
     },
     handleIconFocus() {
@@ -333,7 +332,6 @@ export default {
     onSubmit() {
       findMenu(this.menuQuery).then(res => {
         this.menuData = res.data
-        this.loading = false
       })
     },
     resetMenuQuery() {
