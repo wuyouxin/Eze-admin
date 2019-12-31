@@ -28,6 +28,9 @@ service.interceptors.response.use(
     if (data.code === 200 && !data.data) {
       return Message.success('操作成功！')
     }
+    if (!data.success) {
+      return Message.warning(data.message)
+    }
 
     switch (data.code) {
       case 401:
@@ -45,9 +48,8 @@ service.interceptors.response.use(
     return Promise.resolve(data)
   },
   error => {
-    console.log('err' + error)
     Message({
-      message: error.message,
+      message: '请求出错',
       type: 'error',
       duration: 5 * 1000,
     })

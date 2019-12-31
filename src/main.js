@@ -10,6 +10,7 @@ import router from './router'
 
 import 'assets/icons'
 import './router/permission'
+
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
@@ -18,6 +19,7 @@ import './router/permission'
  * Currently MockJs will be used in the production environment,
  * please remove it before going online! ! !
  */
+
 import { mockXHR } from '../mock'
 if (process.env.NODE_ENV === 'production') mockXHR()
 

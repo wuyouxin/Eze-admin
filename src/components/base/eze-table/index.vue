@@ -1,8 +1,24 @@
 <template>
   <div class="eze-table-wrapper">
-    <el-table row-key="id" :data="data" :size="size">
+    <el-table
+      row-key="id"
+      :border="border"
+      :data="data"
+      :size="size"
+    >
       <template v-for="(column, index) of columns">
         <el-table-column
+          v-if="column.prop === 'index'"
+          :key="`column_${index}`"
+          type="index"
+          :prop="column.prop"
+          :label="column.label"
+          :align="column.align"
+          :width="column.width"
+          :min-width="column.minWidth	"
+        />
+        <el-table-column
+          v-else
           :key="`column_${index}`"
           :prop="column.prop"
           :label="column.label"
@@ -55,6 +71,10 @@ export default {
     size: {
       type: String,
       default: 'small',
+    },
+    border: {
+      type: Boolean,
+      default: false,
     },
   },
 }

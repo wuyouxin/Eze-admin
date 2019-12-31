@@ -34,8 +34,9 @@ export default [
       }
 
       return {
-        code: 20000,
+        code: 200,
         data: token,
+        success: true,
       }
     },
   },
@@ -58,6 +59,7 @@ export default [
       return {
         code: 20000,
         data: info,
+        success: true,
       }
     },
   },
@@ -68,8 +70,9 @@ export default [
     type: 'post',
     response: _ => {
       return {
-        code: 20000,
+        code: 200,
         data: 'success',
+        success: true,
       }
     },
   },

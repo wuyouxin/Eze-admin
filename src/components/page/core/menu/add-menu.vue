@@ -36,7 +36,12 @@
             <el-input v-model="menuForm.icon" placeholder="请输入图标名称或选择" />
           </el-col>
           <el-col :span="4">
-            <el-button size="small" type="primary" @click="handleIconShow">选择</el-button>
+            <el-button
+              round
+              size="mini"
+              type="primary"
+              @click="handleIconShow"
+            >选择</el-button>
           </el-col>
         </el-form-item>
         <el-form-item v-if="type === 1" label="物理地址" prop="component">
@@ -48,7 +53,7 @@
         <el-form-item>
           <el-button
             style="width:100%;margin-top:40px;"
-            size="medium"
+            size="small"
             type="primary"
             @click="submitForm"
           >立即创建</el-button>

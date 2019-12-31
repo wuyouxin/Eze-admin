@@ -27,7 +27,6 @@
       <el-divider />
 
       <eze-table
-        border
         size="mini"
         :columns="columns"
         :data="menuData"
@@ -36,12 +35,13 @@
           <svg-icon v-if="row.icon" :icon-class="row.icon" />
           <span v-else>-</span>
         </template>
-        <template #action="{ row, index }">
+        <template #action>
           <el-button
             circle
             size="small"
             type="primary"
             round
+            @click="handleActionShow"
           >
             <svg-icon icon-class="action" />
           </el-button>
@@ -50,6 +50,7 @@
             size="small"
             type="success"
             round
+            @click="handleResourceShow"
           >
             <svg-icon icon-class="resource" />
           </el-button>
@@ -66,6 +67,8 @@
         </template>
       </eze-table>
     </el-card>
+    <action ref="action" />
+    <resource ref="resource" />
   </div>
 </template>
 
@@ -80,6 +83,8 @@ import { getAllMenusType, findAllMenusType } from '@/api'
 export default {
   components: {
     EzeTable: () => import('@@/base/eze-table'),
+    Action: () => import('./action'),
+    Resource: () => import('./resource'),
   },
   data() {
     return {
@@ -149,6 +154,7 @@ export default {
         const { records, total } = res.data
         this.menuData = records
         this.total = total
+      }).catch(() => {
       })
     },
     onSubmit() {
@@ -156,6 +162,7 @@ export default {
         const { records, total } = res.data
         this.menuData = records
         this.total = total
+      }).catch(() => {
       })
     },
     resetMenuQuery() {
@@ -165,6 +172,12 @@ export default {
     currentChange(index) {
       this.current = index
       this.getAllMenusType()
+    },
+    handleActionShow() {
+      this.$refs.action.showDrawer()
+    },
+    handleResourceShow() {
+      this.$refs.resource.showDrawer()
     },
   },
 }

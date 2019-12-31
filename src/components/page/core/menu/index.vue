@@ -43,7 +43,6 @@
       <el-divider />
 
       <eze-table
-        border
         size="mini"
         :columns="columns"
         :data="menuData"
@@ -103,7 +102,7 @@
               size="small"
               type="success"
               icon="el-icon-coin"
-              @click="handleUpdateMenu(index,row)"
+              @click="handleUpdateMenu(row,index)"
             />
             <el-button
               circle
@@ -119,14 +118,14 @@
               size="small"
               type="primary"
               icon="el-icon-edit"
-              @click="handleEditMenu(index,row)"
+              @click="handleEditMenu(row,index)"
             />
             <el-button
               circle
               size="small"
               type="danger"
               icon="el-icon-delete"
-              @click="handleDeleteMenu(index,row)"
+              @click="handleDeleteMenu(row,index)"
             />
             <el-button
               v-if="row.status"
@@ -134,7 +133,7 @@
               size="small"
               type="success"
               icon="el-icon-unlock"
-              @click="handleUpdateStatus(0,row)"
+              @click="handleUpdateStatus(row,0)"
             />
             <el-button
               v-if="!row.status"
@@ -142,7 +141,7 @@
               size="small"
               type="info"
               icon="el-icon-lock"
-              @click="handleUpdateStatus(1,row)"
+              @click="handleUpdateStatus(row,1)"
             />
           </div>
         </template>
@@ -279,6 +278,7 @@ export default {
     getAllMenus() {
       getAllMenus().then(res => {
         this.menuData = res.data
+      }).catch(() => {
       })
     },
     handleIconFocus() {
@@ -287,19 +287,20 @@ export default {
     handleSelectIcon(icon) {
       this.editRow.icon = icon
     },
-    handleEditMenu(index, row) {
+    handleEditMenu(row, index) {
       // iocn用
       this.editRow = row
       this.editIndex = index
     },
-    handleUpdateMenu(index, row) {
+    handleUpdateMenu(row, index) {
       // 保存数据，向后台取数据
       this.editIndex = -1
       updateMenu(row).then(res => {
         this.getAllMenus()
+      }).catch(() => {
       })
     },
-    handleDeleteMenu(index, row) {
+    handleDeleteMenu(row, index) {
       const { id, children } = row
       if (children && children.length) {
         return this.$message.error('还有子节点，不能删除！')
@@ -322,16 +323,18 @@ export default {
     handleAddMenuShow() {
       this.$refs.addMenu.showDrawer()
     },
-    handleUpdateStatus(status, row) {
+    handleUpdateStatus(row, status) {
       row.status = status
       updateMenu(row).then(res => {
         this.getAllMenus()
+      }).catch(() => {
       })
     },
 
     onSubmit() {
       findMenu(this.menuQuery).then(res => {
         this.menuData = res.data
+      }).catch(() => {
       })
     },
     resetMenuQuery() {

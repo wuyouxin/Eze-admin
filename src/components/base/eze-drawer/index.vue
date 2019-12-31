@@ -4,6 +4,7 @@
     :title="title"
     :visible.sync="drawer"
     :with-header="true"
+    :size="size"
   >
     <slot />
   </el-drawer>
@@ -16,6 +17,10 @@ export default {
     title: {
       type: String,
       default: '我是标题',
+    },
+    size: {
+      type: String,
+      default: '30%',
     },
   },
   data() {
